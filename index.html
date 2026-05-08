@@ -5,18 +5,6 @@
 
     <style>
         body{font-family:metric;}
-			.background{fill:#fff1e0;}
-			.anno-capture{fill-opacity:0;}
-
-        .annotation-note-bg {
-            fill-opacity: 0.8;
-        }
-
-        .annotation-note-label,
-        .annotation-note-title {
-          fill: black;
-          font-size: 0.8em;
-        }
 
         #dataTableControl {
             position: absolute;
@@ -134,16 +122,11 @@
 	<link rel="stylesheet" type="text/css" href="./libs/spectrum/spectrum.css">
 	<link rel="stylesheet" type="text/css" href="./libs/jstree/themes/mixed/style.css">
 
-    <!--jquery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-
     <!-- stylesheets -->
-    <link rel="stylesheet" href="data/lib/css/bootstrap.min.css">
-    <link rel="stylesheet" href="data/css/progress.css">
-    <link rel='stylesheet' href='data/css/index.css'>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/progress.css">
+    <link rel="stylesheet" href="assets/index.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css">-->
-    <link rel="stylesheet" href="vakata-jstree/dist/themes/default/style.css">
 
 </head>
 <body>
@@ -160,21 +143,17 @@
 	<script src="./build/potree/potree.js"></script>
 	<script src="./libs/plasio/js/laslaz.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
     <!-- bootstrap -->
-    <script src="data/lib/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
 
     <!--user scripts -->
     <script src="d3.v4.js"></script>
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>-->
-    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
-    <script src='dt.js'></script>
-    <script src='donut.js'></script>
+    <script src="dt.js"></script>
+    <script src="donut.js"></script>
     <script src="classConfig.js"></script>
-    <script src='data/progress.js'></script>
-    <script src='./data/streaming-tsv-parser.js'></script>
-    <script src='./glyphConfig.js'></script>
+    <script src="assets/progress.js"></script>
+    <script src="glyphConfig.js"></script>
 
 <!--    <div id="GenePanelButton" class="map-content">-->
 <!--        <a id="legend-link" target="_blank">Gene Panel &raquo;</a>-->
@@ -332,7 +311,6 @@
     </script>
 
     <script type="module">
-        import * as THREE from "./libs/three.js/build/three.module.js";
         import config from "./config.module.js"
         import data_loader from './dataLoader.module.js'
         import { instanceShow, hideAll, showAll } from "./my_utils.js"

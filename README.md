@@ -35,6 +35,7 @@ glyphConfig.js, glyphPaths.js   per-gene glyph styling
 73_gene_colour_scheme.js gene colour scheme
 my_utils.js              instanced-mesh helpers
 streaming-tsv-parser.js  web worker that streams a TSV in chunks
+assets/                  vendored CSS/JS for the app (Bootstrap, progress UI, top-level styles)
 data/                    (gitignored) local copy of the merfish TSVs
 pointclouds/             (gitignored) Potree octree binaries — too big for git
 src/, libs/, build/      vendored Potree (don't hand-edit)

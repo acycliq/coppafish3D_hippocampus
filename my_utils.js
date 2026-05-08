@@ -1,4 +1,5 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
+import { state } from "./state.module.js";
 
 export function getAllPointsOfPointCloud(pointCloud) {
     var list = [];
@@ -59,16 +60,16 @@ export function instanceShow( im, instanceIdx, visible )
 }
 
 export function hideAll(){
-    var count = cells.front_face.instancedMesh.instanceMatrix.count
+    var count = state.cells.front_face.instancedMesh.instanceMatrix.count
     for (var i=0; i<count; i++){
-        instanceShow(cells.front_face.instancedMesh, i, false)
+        instanceShow(state.cells.front_face.instancedMesh, i, false)
     }
 }
 
 export function showAll(){
-    var count = cells.front_face.instancedMesh.instanceMatrix.count
+    var count = state.cells.front_face.instancedMesh.instanceMatrix.count
     for (var i=0; i<count; i++){
-        instanceShow(cells.front_face.instancedMesh, i, true)
+        instanceShow(state.cells.front_face.instancedMesh, i, true)
     }
 }
 

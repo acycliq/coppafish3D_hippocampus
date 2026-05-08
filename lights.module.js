@@ -1,8 +1,9 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
+import { state } from "./state.module.js";
 
 function iniLights() {
     // LIGHTS
-    viewer.scene.scene.add(new THREE.AmbientLight(0x666666));
+    state.viewer.scene.scene.add(new THREE.AmbientLight(0x666666));
 
     var light = new THREE.DirectionalLight(0xfcfcfc, 1.0);
     light.position.set(90, 120, 5);
@@ -17,7 +18,7 @@ function iniLights() {
     light.shadow.camera.far = 400;
     // light.shadow.bias = -0.01; // You may need to tweak this to avoid artifacts if the mesh is receiving shadows
     // light.shadowDarkness = 0.2;
-    viewer.scene.scene.add(light);
+    state.viewer.scene.scene.add(light);
 
 
     var light_2;
@@ -34,7 +35,7 @@ function iniLights() {
     light_2.shadow.camera.far = 400;
     // light_2.shadow.bias = -0.01; // You may need to tweak this to avoid artifacts if the mesh is receiving shadows
     // light.shadowDarkness = 0.2;
-    viewer.scene.scene.add(light_2);
+    state.viewer.scene.scene.add(light_2);
 }
 
 export default iniLights

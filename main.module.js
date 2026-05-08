@@ -1,32 +1,36 @@
-// Entry-point module. Bootstraps the Potree viewer, exposes shared state on
-// `window` (so non-module scripts like donut.js / dt.js / my_utils.js can read
-// `viewer`, `scene`, `cells`, `cellData`, …), then kicks off data loading.
+// Entry-point module. Bootstraps the Potree viewer, populates shared state,
+// and kicks off data loading. Sibling modules read state from
+// `state.module.js`; `window.viewer` / `window.scene` are kept exclusively for
+// `controls.js` (a classic script that can't `import`) and console debugging.
 
 import config from "./config.module.js";
 import data_loader from "./dataLoader.module.js";
 import { instanceShow, hideAll, showAll } from "./my_utils.js";
 import { groupBy } from "./initScene.module.js";
+import { state } from "./state.module.js";
 
-window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-window.scene = viewer.scene;
-window.cells = {};
-window.cellData = [];
+state.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+state.scene = state.viewer.scene;
+
+// classic-script + console access
+window.viewer = state.viewer;
+window.scene = state.scene;
 window.instanceShow = instanceShow;
 window.hideAll = hideAll;
 window.showAll = showAll;
 window.groupBy = groupBy;
 
-viewer.setEDLEnabled(false); // disable so transparency in the meshes works fine
-viewer.setFOV(60);
-viewer.setPointBudget(2_000_000);
-viewer.loadSettingsFromURL();
-viewer.setFilterFloatArray([]);
+state.viewer.setEDLEnabled(false); // disable so transparency in the meshes works fine
+state.viewer.setFOV(60);
+state.viewer.setPointBudget(2_000_000);
+state.viewer.loadSettingsFromURL();
+state.viewer.setFilterFloatArray([]);
 
 const url = './pointclouds/sfn/octree/metadata.json';
 Potree.loadPointCloud(url, 'merfish', onloaded);
 
 function onloaded(e) {
-    let scene = viewer.scene;
+    let scene = state.viewer.scene;
     let pointcloud = e.pointcloud;
     let material = pointcloud.material;
 

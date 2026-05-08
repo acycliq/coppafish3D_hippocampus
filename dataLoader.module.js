@@ -1,5 +1,6 @@
 import make_cells_2 from './stage_cells.module.js'
 import initScene from './initScene.module.js'
+import { state } from './state.module.js'
 
 function data_loader(workPackage) {
     var data = [],
@@ -107,9 +108,8 @@ function data_loader(workPackage) {
 
     function onDataLoaded(data) {
         console.log(data)
-        cellData = data.cellData
-        cellData = postLoad(cellData)
-        initScene(cellData)
+        state.cellData = postLoad(data.cellData)
+        initScene(state.cellData)
 
         console.log('Done!')
     }

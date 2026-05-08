@@ -2,18 +2,19 @@ import * as THREE from "./libs/three.js/build/three.module.js";
 import make_cells_2 from "./stage_cells.module.js";
 import {tree, myjsTree} from "./stage_cells.module.js";
 import iniLights from "./lights.module.js";
+import { state } from "./state.module.js";
 
 var last_visited = 0
 function initScene(cellData){
-    cells = make_cells_2(cellData)
-    viewer.scene.scene.add(cells.front_face.instancedMesh);
+    state.cells = make_cells_2(cellData)
+    state.viewer.scene.scene.add(state.cells.front_face.instancedMesh);
 
     iniLights()
 
-    // viewer.renderer.domElement.addEventListener('mousemove', onMouseMove, false)
+    // state.viewer.renderer.domElement.addEventListener('mousemove', onMouseMove, false)
     // add a tiny throttle. The callback onMouseMove wont be called until after 5milliseconds
     // have passed.
-    viewer.renderer.domElement.addEventListener('mousemove', throttle(onMouseMove, 5));
+    state.viewer.renderer.domElement.addEventListener('mousemove', throttle(onMouseMove, 5));
 
 
     attach_tree_control(cellData)
@@ -62,20 +63,20 @@ export function groupBy(array, key){
 
 function onMouseMove(event) {
     const mouse = {
-        x: (event.clientX / viewer.renderer.domElement.clientWidth) * 2 - 1,
-        y: -(event.clientY / viewer.renderer.domElement.clientHeight) * 2 + 1,
+        x: (event.clientX / state.viewer.renderer.domElement.clientWidth) * 2 - 1,
+        y: -(event.clientY / state.viewer.renderer.domElement.clientHeight) * 2 + 1,
     }
 
     // console.log(mouse)
     const raycaster = new THREE.Raycaster()
 
-    raycaster.setFromCamera(mouse, scene.getActiveCamera())
+    raycaster.setFromCamera(mouse, state.scene.getActiveCamera())
 
-    const intersects = raycaster.intersectObjects([cells.front_face.instancedMesh])
+    const intersects = raycaster.intersectObjects([state.cells.front_face.instancedMesh])
 
     if (intersects.length > 0) {
         if (intersects[0].distance < 2000){
-            var instanceId = cellData[intersects[0].instanceId];
+            var instanceId = state.cellData[intersects[0].instanceId];
             if (last_visited !== instanceId.label){
                 // remove the lines from the last visited cell and draw the ones over the new cell
                 // I am removing the lines twice. First all the lines (no matter the cell) and then the ones specific to the last cell
@@ -120,9 +121,9 @@ function splitArgs(label) {
 
         var data = args[0];
         var geneColors = args[1];
-        var targetCell = cellData.filter(d => d.label === label)[0]
+        var targetCell = state.cellData.filter(d => d.label === label)[0]
         var lines = make_line(data, targetCell, geneColors)
-        lines.map(d => viewer.scene.scene.add(d));
+        lines.map(d => state.viewer.scene.scene.add(d));
         var spots = groupBy(data, 'gene');
         showControls()
         renderDataTable(spots, targetCell)
@@ -135,7 +136,7 @@ function splitArgs(label) {
 //     return function onCellMouseHover(data) {
 //         var targetCell = cellData.filter(d => d.label === label)[0]
 //         var lines = make_line(data, targetCell)
-//         lines.map(d => viewer.scene.scene.add(d));
+//         lines.map(d => state.viewer.scene.scene.add(d));
 //         var spots = groupBy(data, 'gene');
 //         // $('#dataTableControl').show();
 //         // $('#cellCoordsControl').show();
@@ -166,7 +167,7 @@ function make_line(obj, targetCell, geneColors){
 }
 
 function remove_line(label){
-    var scene = viewer.scene.scene
+    var scene = state.viewer.scene.scene
     scene.children.filter(d => (d.type === "Line") && (d.name === label)).forEach(el => scene.remove(el))
 }
 

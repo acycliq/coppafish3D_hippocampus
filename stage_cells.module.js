@@ -28,7 +28,7 @@ function ellipsoids_2(data, props) {
     var counts = data.length,
         loader = new THREE.TextureLoader();
 
-    const flakesTexture = loader.load('./src/flakes.png')
+    const flakesTexture = loader.load('./flakes.png')
     const base_props = {
         clearcoat: 1.0,
         clearcoatRoughness: 0,

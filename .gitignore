@@ -1,0 +1,24 @@
+# Editors / IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / build artefacts
+node_modules/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.xml
+
+# Datasets — too large for git, served from a Google Cloud bucket at runtime.
+# See README.md for how to fetch a local copy for development.
+/data
+/pointclouds

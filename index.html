@@ -154,6 +154,7 @@
     <script src="classConfig.js"></script>
     <script src="assets/progress.js"></script>
     <script src="glyphConfig.js"></script>
+    <script src="controls.js"></script>
 
 <!--    <div id="GenePanelButton" class="map-content">-->
 <!--        <a id="legend-link" target="_blank">Gene Panel &raquo;</a>-->
@@ -279,123 +280,7 @@
             </table>
         </div>
 
-    <script>
-        function removePreloader() {
-            $('#preloader').delay(350).fadeOut(250); // will fade out the white DIV that covers the website.
-            $('body').delay(350).css({'overflow': 'visible'});
-        }
-    </script>
-
-    <script>
-        function remove_lines(){
-            var scene = viewer.scene.scene
-            scene.children.filter(d => d.type === "Line").forEach(el => scene.remove(el))
-        }
-
-        function clearScreen(){
-            remove_lines()
-            hideControls()
-        }
-
-        function hideControls(){
-            $('#dataTableControl').hide();
-            $('#donutChartControl').hide();
-            $('#cellCoordsControl').hide();
-        }
-
-        function showControls(){
-            $('#dataTableControl').show();
-            $('#donutChartControl').show();
-            $('#cellCoordsControl').show();
-        }
-    </script>
-
-    <script type="module">
-        import config from "./config.module.js"
-        import data_loader from './dataLoader.module.js'
-        import { instanceShow, hideAll, showAll } from "./my_utils.js"
-        import {groupBy} from "./initScene.module.js"
-
-        window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-        window.scene = viewer.scene;
-        window.cells = {};
-        window.cellData = [];
-        window.instanceShow = instanceShow
-        window.hideAll = hideAll
-        window.showAll = showAll
-        window.groupBy = groupBy
-
-		viewer.setEDLEnabled(false); //disable this so that transparency in the meshes works fine
-		viewer.setFOV(60);
-		viewer.setPointBudget(2_000_000);
-		viewer.loadSettingsFromURL();
-
-		// viewer.setDescription("merfish data: Brad Lowell lab (75million spots)");
-		viewer.renderer
-
-        viewer.setFilterFloatArray([]);
-
-		var legend_added = false
-
-
-        let url = './pointclouds/sfn/octree/metadata.json';
-        Potree.loadPointCloud(url, 'merfish', onloaded)
-
-		function onloaded(e) {
-            let scene = viewer.scene;
-            let pointcloud = e.pointcloud;
-            let material = pointcloud.material;
-
-            material.size = 0.02;
-            material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-            material.shape = Potree.PointShape.CIRCLE
-            material.activeAttributeName = "rgba";
-
-
-            scene.addPointCloud(pointcloud);
-            scene.view.position.set(0.0, 330, 17000);
-            scene.view.lookAt(0, 0, 0);
-
-            run()
-
-        }
-
-        function run(){
-            console.log('app starts');
-            var configSettings = config();
-            configSettings.cellData["name"] = "cellData";
-            // configSettings.geneData["name"] = "geneData";
-            // configSettings.cellBoundaries["name"] = "cellBoundaries";
-
-            make_package([configSettings.cellData])
-        }
-
-
-
-        function make_package(result) {
-            var workPackage = result.reduce((a, b) => a.concat(b), []);
-            workPackage.forEach(d => d.root_name = strip_url(d.name));
-            workPackage.forEach(d => d.bytes_streamed = 0); //will keep how many bytes have been streamed
-            workPackage.forEach(d => d.data = []);          //will keep the actual data from the flatfiles
-            workPackage.forEach(d => d.data_length = 0);    //will keep the number of points that have been fetched
-            // workPackage = d3.map(workPackage, d => d.name.split('.')[0]);
-            // workPackage = workPackage.map(d => [d.name, d.download_url, d.size]);
-            data_loader(workPackage);
-
-            console.log(result)
-        }
-
-        function strip_url(d) {
-            // if the url has / get the last substring
-            var fName = d.substring(d.lastIndexOf('/')+1);
-
-            // then strip the extension and return the value
-            return fName.split('.')[0]
-        }
-
-
-
-    </script>
+    <script type="module" src="./main.module.js"></script>
 
 </body>
 </html>

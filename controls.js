@@ -10,13 +10,13 @@ function removePreloader() {
     $('body').delay(350).css({'overflow': 'visible'});
 }
 
-function remove_lines() {
+function removeLines() {
     var scene = viewer.scene.scene;
     scene.children.filter(d => d.type === "Line").forEach(el => scene.remove(el));
 }
 
 function clearScreen() {
-    remove_lines();
+    removeLines();
     hideControls();
 }
 

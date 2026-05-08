@@ -4,7 +4,7 @@
 // `controls.js` (a classic script that can't `import`) and console debugging.
 
 import config from "./config.module.js";
-import data_loader from "./dataLoader.module.js";
+import dataLoader from "./dataLoader.module.js";
 import { instanceShow, hideAll, showAll } from "./my_utils.js";
 import { groupBy } from "./initScene.module.js";
 import { state } from "./state.module.js";
@@ -47,24 +47,21 @@ function onloaded(e) {
 }
 
 function run() {
-    console.log('app starts');
     var configSettings = config();
     configSettings.cellData["name"] = "cellData";
-    make_package([configSettings.cellData]);
+    makePackage([configSettings.cellData]);
 }
 
-function make_package(result) {
+function makePackage(result) {
     var workPackage = result.reduce((a, b) => a.concat(b), []);
-    workPackage.forEach(d => d.root_name = strip_url(d.name));
+    workPackage.forEach(d => d.root_name = stripUrl(d.name));
     workPackage.forEach(d => d.bytes_streamed = 0);  // bytes streamed so far
     workPackage.forEach(d => d.data = []);            // accumulated rows from the flatfiles
     workPackage.forEach(d => d.data_length = 0);      // number of rows fetched so far
-    data_loader(workPackage);
-
-    console.log(result);
+    dataLoader(workPackage);
 }
 
-function strip_url(d) {
+function stripUrl(d) {
     var fName = d.substring(d.lastIndexOf('/') + 1);
     return fName.split('.')[0];
 }

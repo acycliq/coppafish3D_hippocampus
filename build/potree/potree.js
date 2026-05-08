@@ -54976,7 +54976,6 @@
 			}
 
 			if(params.pickWindowSize){
-				console.log('pickWindowSize is set to: ' + params.pickWindowSize);
 				pickParams.pickWindowSize = params.pickWindowSize;
 			}
 
@@ -81723,7 +81722,6 @@ ENDSEC
 		}
 
 		onMouseMove (e) {
-			console.log('on onMouseMove, line 397');
 			e.preventDefault();
 
 			let rect = this.domElement.getBoundingClientRect();
@@ -81820,8 +81818,6 @@ ENDSEC
 		onMouseWheel(e){
 			if(!this.enabled) return;
 
-			if(this.logMessages) console.log(this.constructor.name + ": onMouseWheel");
-			
 			e.preventDefault();
 
 			let delta = 0;

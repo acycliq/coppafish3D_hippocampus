@@ -1,15 +1,15 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
-import make_cells_2 from "./stage_cells.module.js";
+import make_cells from "./stage_cells.module.js";
 import {tree, myjsTree} from "./stage_cells.module.js";
-import iniLights from "./lights.module.js";
+import initLights from "./lights.module.js";
 import { state } from "./state.module.js";
 
 var last_visited = 0
 function initScene(cellData){
-    state.cells = make_cells_2(cellData)
+    state.cells = make_cells(cellData)
     state.viewer.scene.scene.add(state.cells.front_face.instancedMesh);
 
-    iniLights()
+    initLights()
 
     // state.viewer.renderer.domElement.addEventListener('mousemove', onMouseMove, false)
     // add a tiny throttle. The callback onMouseMove wont be called until after 5milliseconds
@@ -17,7 +17,7 @@ function initScene(cellData){
     state.viewer.renderer.domElement.addEventListener('mousemove', throttle(onMouseMove, 5));
 
 
-    attach_tree_control(cellData)
+    attachTreeControl(cellData)
 
     // all done, remove the preloader
     removePreloader()
@@ -26,7 +26,7 @@ function initScene(cellData){
 
 }
 
-function attach_tree_control(cellData){
+function attachTreeControl(cellData){
     var classNames = cellData.map(d => d.top_class).filter(d=>d >= 0)
     classNames = [...new Set(classNames)];
     classNames = classNames.sort()
@@ -82,8 +82,8 @@ function onMouseMove(event) {
                 // I am removing the lines twice. First all the lines (no matter the cell) and then the ones specific to the last cell
                 // sometimes I may end up with two cell having lines, hence I am doing this twice. There must be a better way,
                 // maybe to throttle the mouse event?
-                remove_lines()
-                // remove_line(last_visited) // I am throttling now, hence this is now redundant
+                removeLines()
+                // removeLine(last_visited) // I am throttling now, hence this is now redundant
                 // $('html,body').css('cursor', 'pointer');
                 cellMouseHover(instanceId.label)
                 last_visited = instanceId.label
@@ -97,7 +97,7 @@ function onMouseMove(event) {
     else {
         // if you are now hovering over any cell, remove any lines you have drawn already
         // and map the last_visited variable to 0 (ie the label for the background)
-        remove_lines()
+        removeLines()
         // $('html,body').css('cursor', 'default');
         last_visited = 0
     }
@@ -122,7 +122,7 @@ function splitArgs(label) {
         var data = args[0];
         var geneColors = args[1];
         var targetCell = state.cellData.filter(d => d.label === label)[0]
-        var lines = make_line(data, targetCell, geneColors)
+        var lines = makeLine(data, targetCell, geneColors)
         lines.map(d => state.viewer.scene.scene.add(d));
         var spots = groupBy(data, 'gene');
         showControls()
@@ -135,7 +135,7 @@ function splitArgs(label) {
 // function outer(label){
 //     return function onCellMouseHover(data) {
 //         var targetCell = cellData.filter(d => d.label === label)[0]
-//         var lines = make_line(data, targetCell)
+//         var lines = makeLine(data, targetCell)
 //         lines.map(d => state.viewer.scene.scene.add(d));
 //         var spots = groupBy(data, 'gene');
 //         // $('#dataTableControl').show();
@@ -145,7 +145,7 @@ function splitArgs(label) {
 //     }
 // }
 
-function get_color(gene, geneColors){
+function getColor(gene, geneColors){
     var specs = geneColors.filter(d => d.gene == gene)
     if (specs){
         return {'r': +specs[0].r, 'g': +specs[0].g, 'b': +specs[0].b}
@@ -155,23 +155,23 @@ function get_color(gene, geneColors){
     }
 }
 
-function make_line(obj, targetCell, geneColors){
+function makeLine(obj, targetCell, geneColors){
     var arr = Object.entries(obj).map(d => d[1]).flat()
-    arr.forEach(d => d['r'] = get_color(d.gene, geneColors).r)
-    arr.forEach(d => d['g'] = get_color(d.gene, geneColors).g)
-    arr.forEach(d => d['b'] = get_color(d.gene, geneColors).b)
+    arr.forEach(d => d['r'] = getColor(d.gene, geneColors).r)
+    arr.forEach(d => d['g'] = getColor(d.gene, geneColors).g)
+    arr.forEach(d => d['b'] = getColor(d.gene, geneColors).b)
     var out = arr.map(d => {
-        return make_line_helper(d, targetCell)
+        return makeLineHelper(d, targetCell)
     });
     return out
 }
 
-function remove_line(label){
+function removeLine(label){
     var scene = state.viewer.scene.scene
     scene.children.filter(d => (d.type === "Line") && (d.name === label)).forEach(el => scene.remove(el))
 }
 
-function make_line_helper(spotData, targetCell) {
+function makeLineHelper(spotData, targetCell) {
     var points = [];
     points.push(
         new THREE.Vector3(spotData.x, spotData.y, spotData.z),

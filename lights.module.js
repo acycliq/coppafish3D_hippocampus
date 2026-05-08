@@ -1,7 +1,7 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
 import { state } from "./state.module.js";
 
-function iniLights() {
+function initLights() {
     // LIGHTS
     state.viewer.scene.scene.add(new THREE.AmbientLight(0x666666));
 
@@ -38,4 +38,4 @@ function iniLights() {
     state.viewer.scene.scene.add(light_2);
 }
 
-export default iniLights
+export default initLights

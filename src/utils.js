@@ -412,7 +412,6 @@ export class Utils {
 		}
 
 		if(params.pickWindowSize){
-			console.log('pickWindowSize is set to: ' + params.pickWindowSize)
 			pickParams.pickWindowSize = params.pickWindowSize;
 		}
 

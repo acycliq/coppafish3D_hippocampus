@@ -1,15 +1,14 @@
-import make_cells_2 from './stage_cells.module.js'
 import initScene from './initScene.module.js'
 import { state } from './state.module.js'
 
-function data_loader(workPackage) {
+function dataLoader(workPackage) {
     var data = [],
         agg_data,
         previous_avg = 0;
     var average = list => list.reduce((prev, curr) => prev + curr) / list.length;
     workPackage = workPackage.sort((a,b) =>  a.size-b.size); //order by size (hemmm...doest really matter, does it?? Everything happens in parallel)
 
-    function aggregate_stats(workPackage){
+    function aggregateStats(workPackage){
         var out = [];
         var names = [... new Set(workPackage.map(d => d.root_name))].sort();
         names.forEach(name => {
@@ -25,7 +24,7 @@ function data_loader(workPackage) {
         return out
     }
 
-    function aggregate_data(workPackage) {
+    function aggregateData(workPackage) {
         var out = {};
         var names = [...new Set(workPackage.map(d => d.root_name))].sort();
         names.forEach(name => {
@@ -54,7 +53,7 @@ function data_loader(workPackage) {
         worker.onmessage = function (event) {
             if (event.data.finished) {
                 console.log(agg_data);
-                data = aggregate_data(workPackage);
+                data = aggregateData(workPackage);
                 onDataLoaded(data);
                 // redraw(stats);
                 return
@@ -63,7 +62,7 @@ function data_loader(workPackage) {
             workPackage[i].bytes_streamed += event.data.bytes_streamed;
             workPackage[i].data = workPackage[i].data.concat(event.data.items);
             workPackage[i].data_length += event.data.items.length;
-            agg_data = aggregate_stats(workPackage);
+            agg_data = aggregateStats(workPackage);
 
             redraw(agg_data);
         };
@@ -137,4 +136,4 @@ function data_loader(workPackage) {
     worker.postMessage(workPackage);
 }
 
-export default data_loader
+export default dataLoader

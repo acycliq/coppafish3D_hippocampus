@@ -394,7 +394,6 @@ export class InputHandler extends EventDispatcher {
 	}
 
 	onMouseMove (e) {
-		console.log('on onMouseMove, line 397')
 		e.preventDefault();
 
 		let rect = this.domElement.getBoundingClientRect();
@@ -491,8 +490,6 @@ export class InputHandler extends EventDispatcher {
 	onMouseWheel(e){
 		if(!this.enabled) return;
 
-		if(this.logMessages) console.log(this.constructor.name + ": onMouseWheel");
-		
 		e.preventDefault();
 
 		let delta = 0;

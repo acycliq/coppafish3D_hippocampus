@@ -1,6 +1,6 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
 
-function make_cells_2(data) {
+function make_cells(data) {
     var front_props = {
             side: THREE.FrontSide,
             opacity: 0.4,
@@ -16,15 +16,15 @@ function make_cells_2(data) {
     var NON_ZERO_CELLS = data.filter(d => d.topClass !== 'ZeroXXX');
     // NON_ZERO_CELLS = NON_ZERO_CELLS.filter(d => d.topClass.startsWith('Calb2'))
     // data = [data[0]]
-    var front_face = ellipsoids_2(NON_ZERO_CELLS, front_props),
-        back_face = ellipsoids_2(NON_ZERO_CELLS, back_props);
+    var front_face = ellipsoids(NON_ZERO_CELLS, front_props),
+        back_face = ellipsoids(NON_ZERO_CELLS, back_props);
         var cells = {};
     cells.front_face = front_face;
     cells.back_face = back_face;
     return cells
 }
 
-function ellipsoids_2(data, props) {
+function ellipsoids(data, props) {
     var counts = data.length,
         loader = new THREE.TextureLoader();
 
@@ -55,7 +55,7 @@ function ellipsoids_2(data, props) {
     var geometry =  new THREE.SphereBufferGeometry(1, widthSegments, heightSegments);
     var _n = geometry.index.count/3;
     console.log('triangles: ' + (_n * counts).toLocaleString());
-    var INSTANCEDMESH = new THREE.InstancedMesh(
+    var instancedMesh = new THREE.InstancedMesh(
         //provide geometry
         geometry,
 
@@ -85,16 +85,16 @@ function ellipsoids_2(data, props) {
         dummy.scale.set(scales.x*0.99, scales.y*0.99, scales.z*0.99);
         dummy.rotation.set(rot.x, rot.y, rot.z);
         dummy.updateMatrix();
-        INSTANCEDMESH.name = props.name;
-        INSTANCEDMESH.setMatrixAt(i, dummy.matrix);
-        INSTANCEDMESH.setColorAt(i, new THREE.Color( rgb.r/255.0, rgb.g/255.0, rgb.b/255.0 ));
+        instancedMesh.name = props.name;
+        instancedMesh.setMatrixAt(i, dummy.matrix);
+        instancedMesh.setColorAt(i, new THREE.Color( rgb.r/255.0, rgb.g/255.0, rgb.b/255.0 ));
         temp_obj.applyMatrix4(dummy.matrix)
     }
     console.log('toc')
-    INSTANCEDMESH.instanceColor.needsUpdate = true;
-    INSTANCEDMESH.visible = true;
-    INSTANCEDMESH.castShadow = true;
-    INSTANCEDMESH.receiveShadow = false;
+    instancedMesh.instanceColor.needsUpdate = true;
+    instancedMesh.visible = true;
+    instancedMesh.castShadow = true;
+    instancedMesh.receiveShadow = false;
 
     function LOD_ramp() {
         // camera.position.distanceTo(scene.position) < 300? mesh_LOD(): null
@@ -108,20 +108,12 @@ function ellipsoids_2(data, props) {
     // viewer.scene.scene.add(new THREE.AmbientLight(0x666666));
 
     var ellipsoidData = {};
-    ellipsoidData.instancedMesh = INSTANCEDMESH;
+    ellipsoidData.instancedMesh = instancedMesh;
     ellipsoidData.LOD_ramp = LOD_ramp;
 
 
     return ellipsoidData
 }
-
-function count_triangles(m){
-    // input m is the mesh
-    var _n = m.geometry.index.count/3;
-    var count = m.count;
-    console.log('triangles: ' + (_n * count).toLocaleString());
-}
-
 
 export function tree(data) {
     // makes the tree object to pass into the tree control as an overlay
@@ -287,5 +279,5 @@ export function myjsTree(treeData) {
 
   };
 
-export default make_cells_2
+export default make_cells
 

@@ -58611,7 +58611,9 @@ void main() {
 //                 discard;
 //             }
 
-            if(vClassification == 0.0){
+            int classIdx = int(floor(vClassification + 0.5));
+
+            if(classIdx == 0){
             // draw the asterisk glyph
                 float diag_1 = 1.0 - lineSegment(gl_PointCoord, vec2(0.30, 0.30), vec2(0.70, 0.70));
                 float diag_2 = 1.0 - lineSegment(gl_PointCoord, vec2(0.30, 0.70), vec2(0.70, 0.30));
@@ -58627,7 +58629,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if(vClassification == 1.0){
+            if(classIdx == 1){
             // draw the circle glyph
                 if(cc > 1.0){
                     discard;
@@ -58637,7 +58639,7 @@ void main() {
                 }
             }
 
-            if (vClassification == 2.0){
+            if (classIdx == 2){
             // draw the cross glyph
                 float diag_1 = 1.0 - lineSegment(gl_PointCoord, vec2(0.05, 0.05), vec2(0.95, 0.95));
                 float diag_2 = 1.0 - lineSegment(gl_PointCoord, vec2(0.05, 0.95), vec2(0.95, 0.05));
@@ -58646,7 +58648,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 3.0){
+            if (classIdx == 3){
             // draw the diamond glyph
                 float side_1 = 1.0 - lineSegment(gl_PointCoord, vec2(0.5, 0.05), vec2(0.9, 0.5));
                 float side_2 = 1.0 - lineSegment(gl_PointCoord, vec2(0.9, 0.5), vec2(0.5, 0.95));
@@ -58658,7 +58660,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 4.0){
+            if (classIdx == 4){
             // draw the plus glyph
                 float vertical = 1.0 - lineSegment(gl_PointCoord, vec2(0.5, 0.05), vec2(0.5, 0.95));
                 float horizontal = 1.0 - lineSegment(gl_PointCoord, vec2(0.05, 0.5), vec2(0.95, 0.5));
@@ -58667,7 +58669,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 5.0){
+            if (classIdx == 5){
             // draw the point glyph
                 if(cc > 0.35){
                     discard;
@@ -58679,7 +58681,7 @@ void main() {
 
             }
 
-            if (vClassification == 6.0){
+            if (classIdx == 6){
             // draw the square glyph
             	float top = 1.0 - lineSegment(gl_PointCoord, vec2(0.05, 0.05), vec2(0.95, 0.05));
                 float right = 1.0 - lineSegment(gl_PointCoord, vec2(0.95, 0.05), vec2(0.95, 0.95));
@@ -58691,7 +58693,7 @@ void main() {
 
             }
 
-            if (vClassification == 7.0){
+            if (classIdx == 7){
             // draw the star5 glyph
             	float side = 1.0;  // fragment has side length = 1.0
                 float r = side/2.0;
@@ -58729,7 +58731,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 8.0){
+            if (classIdx == 8){
             // draw the star6 glyph
                 float side = 1.0;  // fragment has side length = 1.0
                 float r = side/2.0;
@@ -58770,7 +58772,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 9.0){
+            if (classIdx == 9){
             // draw the traingleDown glyph
                 float line_1 = 1.0 - lineSegment(gl_PointCoord, vec2(0.05), vec2(0.5, 0.95));
                 float line_2 = 1.0 - lineSegment(gl_PointCoord, vec2(0.5, 0.95), vec2(0.95, 0.05));
@@ -58780,7 +58782,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 10.0){
+            if (classIdx == 10){
             // draw the traingleLeft glyph
             	vec2 uv = (gl_PointCoord - vec2(0.5)) * rot(PI * 0.5); // rotate
                 uv = uv + vec2(0.5);
@@ -58792,7 +58794,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 11.0){
+            if (classIdx == 11){
             // draw the traingleRight glyph
                 vec2 uv = (gl_PointCoord - vec2(0.5)) * rot(1.5 * PI); // rotate
                 uv = uv + vec2(0.5);
@@ -58804,7 +58806,7 @@ void main() {
                 if (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b == 0.0) discard;
             }
 
-            if (vClassification == 12.0){
+            if (classIdx == 12){
             // draw the traingleUp glyph
             	vec2 uv = (gl_PointCoord - vec2(0.5)) * rot(PI); // rotate
                 uv = uv + vec2(0.5);

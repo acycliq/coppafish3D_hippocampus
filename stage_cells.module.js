@@ -279,24 +279,6 @@ export function myjsTree(treeData) {
       ]
     }); // config object end
 
-     // AJAX loading JSON Example:
-     $('#jstree_ajax_demo').jstree({
-      'core': {
-        'data': {
-          "url" : "https://codepen.io/stefanradivojevic/pen/dWLZOb.js",
-          "dataType" : "json" // needed only if you do not supply JSON headers
-        }
-      },
-      // Types plugin
-      "types" : {
-        "default" : {
-          "icon" : "glyphicon glyphicon-record"
-        }
-      },
-       "plugins" : [ "types", "unique" ]
-    });
-
-    // Listen for events - example
     $('#jstree_demo').on("changed.jstree", function (e, data) {
       // changed.jstree is a event
       console.log('selected: ' + data.changed.selected);

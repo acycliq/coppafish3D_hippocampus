@@ -36,8 +36,8 @@ glyphConfig.js, glyphPaths.js   per-gene glyph styling
 my_utils.js              instanced-mesh helpers
 streaming-tsv-parser.js  web worker that streams a TSV in chunks
 assets/                  vendored CSS/JS for the app (Bootstrap, progress UI, top-level styles)
-data/                    (gitignored) local copy of the merfish TSVs
-pointclouds/             (gitignored) Potree octree binaries — too big for git
+data/                    the merfish TSVs (committed)
+pointclouds/             Potree octree binaries (committed; 63 MB octree.bin)
 src/, libs/, build/      vendored Potree (don't hand-edit)
 resources/               Potree resources (icons, textures, fonts)
 py/, *.ipynb             Python helpers and notebooks for preparing the data
@@ -53,11 +53,11 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-For local development you need the dataset on disk. The `data/` and
-`pointclouds/` directories are git-ignored on purpose — the files are large
-and the deployed site fetches them from a Google Cloud bucket. To run the
-viewer locally, obtain the dataset separately and drop it under `data/` and
-`pointclouds/`.
+The `data/` and `pointclouds/` directories are tracked in the repo so the
+deployed GitHub Pages site can serve them directly. `pointclouds/sfn/octree/octree.bin`
+is ~63 MB — under GitHub's 100 MB per-file limit but past the 50 MB warning
+threshold, so you'll see a notice on push. Total weight added by the dataset
+is around 75 MB.
 
 ## Data
 
@@ -86,6 +86,6 @@ as ES modules and classic scripts. No build step needed for normal app work.
 
 ## Deployment
 
-Static hosting on GitHub Pages. All asset paths in `index.html` are relative.
-At runtime, dataset files come from `./data/` and `./pointclouds/` locally,
-or from Google Cloud Storage in production.
+Static hosting on GitHub Pages. All asset paths in `index.html` are relative,
+so the deployed site fetches everything (including `data/` and `pointclouds/`)
+from the same origin.

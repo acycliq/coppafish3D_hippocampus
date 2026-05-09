@@ -24,6 +24,10 @@ state.viewer.setPointBudget(2_000_000);
 state.viewer.loadSettingsFromURL();
 state.viewer.setFilterFloatArray([]);
 
+// Load the gene-panel mapping (point source id → gene name) for the spot tooltip.
+// Exposed on window so the Potree-bundled InputHandler.getHoveredSpot() can read it.
+fetch('./data/gene_dict.json').then(r => r.json()).then(d => { window.genePanel = d; });
+
 const url = './pointclouds/sfn/octree/metadata.json';
 Potree.loadPointCloud(url, 'merfish', onloaded);
 

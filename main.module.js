@@ -1,7 +1,7 @@
 // Entry-point module. Bootstraps the Potree viewer, populates shared state,
 // and kicks off data loading. Sibling modules read state from
-// `state.module.js`; `window.viewer` / `window.scene` are kept exclusively for
-// `controls.js` (a classic script that can't `import`) and console debugging.
+// `state.module.js`. The few `window.*` assignments below are for console
+// debugging only — they expose user-callable helpers, not internal state.
 
 import config from "./config.module.js";
 import dataLoader from "./dataLoader.module.js";
@@ -12,9 +12,7 @@ import { state } from "./state.module.js";
 state.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 state.scene = state.viewer.scene;
 
-// classic-script + console access
-window.viewer = state.viewer;
-window.scene = state.scene;
+// console-debug helpers
 window.instanceShow = instanceShow;
 window.hideAll = hideAll;
 window.showAll = showAll;

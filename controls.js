@@ -1,21 +1,20 @@
-// UI helpers shared across modules and inline event handlers.
-// Loaded as a classic script so these are global, matching the way
-// initScene.module.js and other modules call them by bare name.
-//
-// All of them assume `viewer` has been initialised (set in main.module.js)
-// before they are called.
+// UI helpers for showing/hiding the side controls and clearing the scene.
+// Imported by initScene.module.js; loaded automatically through the module graph
+// (no <script> tag in index.html).
 
-function removePreloader() {
+import { state } from "./state.module.js";
+
+export function removePreloader() {
     $('#preloader').delay(350).fadeOut(250); // fade out the white div that covers the website
     $('body').delay(350).css({'overflow': 'visible'});
 }
 
-function removeLines() {
-    var scene = viewer.scene.scene;
+export function removeLines() {
+    var scene = state.viewer.scene.scene;
     scene.children.filter(d => d.type === "Line").forEach(el => scene.remove(el));
 }
 
-function clearScreen() {
+export function clearScreen() {
     removeLines();
     hideControls();
 }
@@ -26,7 +25,7 @@ function hideControls() {
     $('#cellCoordsControl').hide();
 }
 
-function showControls() {
+export function showControls() {
     $('#dataTableControl').show();
     $('#donutChartControl').show();
     $('#cellCoordsControl').show();

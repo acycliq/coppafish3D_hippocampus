@@ -3,6 +3,7 @@ import make_cells from "./stage_cells.module.js";
 import {tree, myjsTree} from "./stage_cells.module.js";
 import initLights from "./lights.module.js";
 import { state } from "./state.module.js";
+import { removePreloader, removeLines, clearScreen, showControls } from "./controls.js";
 
 var last_visited = 0
 function initScene(cellData){

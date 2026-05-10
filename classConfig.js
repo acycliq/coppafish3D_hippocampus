@@ -93,11 +93,3 @@ function classColorsCodes()
 
     return out
 }
-
-// Maps a positional index from cellData_rgb.tsv's `classes` column to the
-// fine-grained subtype name (`_className_`), e.g. 49 → "Microglia.2",
-// 62 → "PC.CA1.1", 71 → "Zero". Returns undefined for indices outside the config.
-function subtypeAt(index) {
-    var row = classColorsCodes()[index];
-    return row ? row._className_ : undefined;
-}

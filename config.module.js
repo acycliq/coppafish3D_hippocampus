@@ -3,7 +3,7 @@ var config = function () {
             // cellData: {mediaLink: './data/cellData.tsv', size: "96503040"},
             // geneData: {mediaLink: './data/geneData.tsv', size: "136717302"},
             // cellData: {mediaLink: 'https://storage.googleapis.com/merfish_data/cellData_rgb.tsv', size: "96503040"},
-            cellData: {mediaLink: './data/cellData_rgb.tsv', size: "12460217"},
+            cellData: {mediaLink: './data/cellData_rgb.tsv', size: "11476992"},
             // geneData: {mediaLink: 'https://storage.googleapis.com/merfish_data/geneData.tsv', size: "136717302"},
             // cellBoundaries: {mediaLink: './cellBoundaries.tsv', size: "1306209"},
             roi: {"x0": 0, "x1": 7602, "y0": 0, "y1": 5471 },

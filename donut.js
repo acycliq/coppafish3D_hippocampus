@@ -58,8 +58,12 @@ function donut(){
 	var key = function(d){ return d.data.label; };
 	// var colors = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
     // var colors = d3.schemeCategory20
+    // colorMap is keyed by _className_ (the fine subtype name the donut now
+    // uses as slice labels). Falls back to className for the trailing
+    // Generic/Other/Zero rows that have no _className_, so colorMap.get("Other")
+    // still works for the lumped <2% slices.
     var colorRamp = classColorsCodes()
-    var colorMap = d3.map(colorRamp, function(d) { return d.className; });
+    var colorMap = d3.map(colorRamp, function(d) { return d._className_ || d.className; });
 
     var div = d3.select("body").append("div")
         .attr("class", "toolTip")
@@ -262,20 +266,17 @@ function donutchart(dataset) {
     var data = []
     for (var i=0; i < dataset.classes.length; i++) {
         data.push({
-            // value: Math.floor(dataset[i].value*10000)/100,
-            // label: dataset[i].label,
             value: dataset.class_prob[i],
-            label: "class_" + dataset.classes[i],
+            label: subtypeAt(dataset.classes[i]),
         })
     }
 
 
     // For small values assign it to a separate class labeled 'Other'
-    // ok, that can be simplified, do this inside the loop above maybe?
     var sdata = [];
     var ClassName;
     for (var i = 0; i < dataset.class_prob.length; i++) {
-        dataset.class_prob[i] < 0.02? ClassName = 'Other': ClassName = "class_" + dataset.classes[i]
+        dataset.class_prob[i] < 0.02? ClassName = 'Other': ClassName = subtypeAt(dataset.classes[i])
         sdata.push({
             Prob: dataset.class_prob[i],
             labels: ClassName,
@@ -301,7 +302,6 @@ function donutchart(dataset) {
 
     //overwrite data
     data = sdata
-
 
     var svg = d3.select("#piechart").select("svg")
     if (svg.select('.slices').empty()) {

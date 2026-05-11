@@ -93,3 +93,11 @@ function classColorsCodes()
 
     return out
 }
+
+// Maps a positional index from cellData_rgb*.tsv's `classes` column to the
+// fine-grained subtype name (`_className_`). Returns undefined for indices
+// outside the config. Used by donut.js and dt.js.
+function subtypeAt(index) {
+    var row = classColorsCodes()[index];
+    return row ? row._className_ : undefined;
+}

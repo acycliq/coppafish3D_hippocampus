@@ -148,12 +148,16 @@
     <script src="assets/bootstrap.min.js"></script>
 
     <!--user scripts -->
+    <!-- classConfig must load BEFORE dt.js/donut.js so subtypeAt() is defined when they parse -->
     <script src="d3.v4.js"></script>
+    <!-- aang dataset (active) — swap to classConfig.js / glyphConfig.js to use hippocampus -->
+    <script src="classConfig_aang.js"></script>
+    <!-- <script src="classConfig.js"></script> -->
     <script src="dt.js"></script>
     <script src="donut.js"></script>
-    <script src="classConfig.js"></script>
     <script src="assets/progress.js"></script>
-    <script src="glyphConfig.js"></script>
+    <script src="glyphConfig_aang.js"></script>
+    <!-- <script src="glyphConfig.js"></script> -->
 
 <!--    <div id="GenePanelButton" class="map-content">-->
 <!--        <a id="legend-link" target="_blank">Gene Panel &raquo;</a>-->

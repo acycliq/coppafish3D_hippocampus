@@ -1,4 +1,9 @@
 import * as THREE from "./libs/three.js/build/three.module.js";
+import config from "./config.module.js";
+
+// Multiplier applied to pciSeq's sphere_scale values (which are 3σ radii by
+// default). Sourced from config so it can be toggled without code changes.
+const SPHERE_SCALE = config().sphereScale ?? 1;
 
 function make_cells(data) {
     var front_props = {
@@ -82,7 +87,7 @@ function ellipsoids(data, props) {
             // color =  data[i].color;
         var dummy = new THREE.Object3D();
         dummy.position.set(coords.x, coords.y, coords.z);
-        dummy.scale.set(scales.x*0.99, scales.y*0.99, scales.z*0.99);
+        dummy.scale.set(scales.x * SPHERE_SCALE, scales.y * SPHERE_SCALE, scales.z * SPHERE_SCALE);
         dummy.rotation.set(rot.x, rot.y, rot.z);
         dummy.updateMatrix();
         instancedMesh.name = props.name;

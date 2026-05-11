@@ -26,9 +26,16 @@ state.viewer.setFilterFloatArray([]);
 
 // Load the gene-panel mapping (point source id → gene name) for the spot tooltip.
 // Exposed on window so the Potree-bundled InputHandler.getHoveredSpot() can read it.
-fetch('./data/gene_dict.json').then(r => r.json()).then(d => { window.genePanel = d; });
+fetch('./data/gene_dict_aang.json').then(r => r.json()).then(d => { window.genePanel = d; });
+// fetch('./data/gene_dict.json').then(r => r.json()).then(d => { window.genePanel = d; });  // hippocampus
 
-const url = './pointclouds/sfn/octree/metadata.json';
+// Spike-lines feature: load the per-cell spots index once (small, ~1 MB). The blob
+// itself (cell_spots_aang.bin) stays on disk/cloud and is fetched via HTTP Range
+// at hover-time. Exposed on window so initScene.module.js can read it.
+fetch(config().spotsIndex).then(r => r.json()).then(d => { window.cellSpotsIndex = d; });
+
+const url = './pointclouds/aang/octree/metadata.json';
+// const url = './pointclouds/sfn/octree/metadata.json';  // hippocampus
 Potree.loadPointCloud(url, 'merfish', onloaded);
 
 function onloaded(e) {

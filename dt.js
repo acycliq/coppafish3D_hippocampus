@@ -4,17 +4,24 @@ function renderDataTable(spots, cell) {
     var mydata = [];
     var mydata2 = [];
 
-    for (gene_name in spots){
-        mydata.push({
-            "Genenames": gene_name,
-            "CellGeneCount": +spots[gene_name].length.toFixed(2),
-        })
+    // Gene counts are the cell's PROBABILISTIC per-gene expected counts (from
+    // cellData_rgb_aang.tsv's Genenames + CellGeneCount columns), not the integer
+    // count of argmax-assigned spots. This lets a cell that has 0 spike lines
+    // still report informative non-zero counts for genes whose nearby spots have
+    // a small probability of belonging to it.
+    if (cell.Genenames && cell.CellGeneCount) {
+        for (var i = 0; i < cell.Genenames.length; i++) {
+            mydata.push({
+                "Genenames": cell.Genenames[i],
+                "CellGeneCount": +cell.CellGeneCount[i].toFixed(3),
+            })
+        }
     }
 
     var n = cell.class_prob.length;
     for (i = 0; i < n; i++) {
         mydata2.push({
-            "ClassName": cell.classes[i],
+            "ClassName": subtypeAt(cell.classes[i]),
             "Prob": +cell.class_prob[i], // d.Prob can be just a float, make sure it is an array
         })
     }
@@ -93,7 +100,7 @@ function renderDataTable(spots, cell) {
    //      // centroid = dapiConfig.t.untransform(d.centroid);
    //
     var str = "<b> <strong>Cell Num: </strong>" + cell.label
-        + " <br> <strong>Gene Counts: </strong>" + total.toFixed(0)
+        + " <br> <strong>Gene Counts: </strong>" + total.toFixed(2)
         // + " <br>  (<strong>x, y, z</strong>): (" + d.X.toFixed(0) + ", " + d.Y.toFixed(0) + ", " + d.Z.toFixed(0) + ")"
         + " <br>  <strong>x:</strong> " + cell.x.toFixed(0)
         + " <br>  <strong>y:</strong> " + cell.y.toFixed(0)

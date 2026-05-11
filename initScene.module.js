@@ -4,6 +4,19 @@ import {tree, myjsTree} from "./stage_cells.module.js";
 import initLights from "./lights.module.js";
 import { state } from "./state.module.js";
 import { removePreloader, removeLines, clearScreen, showControls } from "./controls.js";
+import config from "./config.module.js";
+
+// Gene → {r,g,b} lookup, built once from glyphSettings() (defined globally by
+// glyphConfig*.js, loaded via <script> tag in index.html before this module).
+const geneColors = (typeof glyphSettings === 'function' ? glyphSettings() : []).map(g => {
+    const h = g.color.replace('#', '');
+    return {
+        gene: g.gene,
+        r: parseInt(h.substr(0, 2), 16),
+        g: parseInt(h.substr(2, 2), 16),
+        b: parseInt(h.substr(4, 2), 16),
+    };
+});
 
 var last_visited = 0
 function initScene(cellData){
@@ -105,16 +118,49 @@ function onMouseMove(event) {
 }
 
 
-function cellMouseHover(label) {
-    console.log('Hovering over cell: ' + label)
-    // "https://storage.googleapis.com/merfish_data/cellData/"
-    // d3.json("./py/cellData/" + label + ".json", outer(label));
-    d3.queue()
-        // .defer(d3.json, "https://storage.googleapis.com/izzie_sfn/cellData/"+ label + ".json")
-        .defer(d3.json, "https://storage.googleapis.com/merfish_data/izzie_sfn/cellData/"+ label + ".json")
-        // .defer(d3.json, "./py/cellData/" + label + ".json")
-        .defer(d3.csv, "https://storage.googleapis.com/merfish_data/izzie_sfn/colour_scheme/colour_scheme.csv")
-        .await(splitArgs(label))
+// Hovering a cell sphere triggers a Range fetch on `cell_spots_*.bin` for just
+// this cell's slice. The slice is decoded into [{gene, x, y, z}, ...] and handed
+// to splitArgs (same shape splitArgs used to receive from the old GCS JSONs).
+//
+// Record format (little-endian, 14 bytes/spot):
+//   uint16  gene_id   (index into window.genePanel — alphabetical gene panel)
+//   float32 x, y, z   (already mean-subtracted to image-centre, same frame as cells)
+async function cellMouseHover(label) {
+    console.log('Hovering over cell: ' + label);
+    const idx = window.cellSpotsIndex;
+    if (!idx) {
+        console.warn('cellSpotsIndex not loaded yet — skipping spike-lines for this hover');
+        return;
+    }
+    const entry = idx[String(label)];
+    if (!entry) {
+        // No spots have this cell as their argmax assignment — render the panels
+        // with an empty spot list so the user still sees "Gene Counts: 0" and the
+        // donut chart for this cell (donut uses class_prob, not spots).
+        splitArgs(label)(null, [], geneColors);
+        return;
+    }
+    const [offset, length] = entry;
+    try {
+        const resp = await fetch(config().spotsBin, {
+            headers: { Range: `bytes=${offset}-${offset + length - 1}` }
+        });
+        const buf = await resp.arrayBuffer();
+        const view = new DataView(buf);
+        const RECORD = 14;
+        const spots = new Array(buf.byteLength / RECORD);
+        for (let i = 0, k = 0; i < buf.byteLength; i += RECORD, k++) {
+            spots[k] = {
+                gene: window.genePanel[view.getUint16(i, true)],
+                x:    view.getFloat32(i + 2, true),
+                y:    view.getFloat32(i + 6, true),
+                z:    view.getFloat32(i + 10, true),
+            };
+        }
+        splitArgs(label)(null, spots, geneColors);
+    } catch (e) {
+        console.error('cellMouseHover fetch failed:', e);
+    }
 }
 
 function splitArgs(label) {

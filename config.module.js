@@ -3,8 +3,9 @@ var config = function () {
             // === aang dataset (active) ===
             cellData: {mediaLink: './data/cellData_rgb_aang.tsv', size: "36243376"},
             // Spike-lines data: one binary blob + a tiny index, fetched lazily via HTTP Range.
-            // To serve from GCS, swap to e.g. 'https://storage.googleapis.com/<bucket>/cell_spots_aang.bin'.
-            spotsBin:   './data/cell_spots_aang.bin',
+            // The blob lives on GCS (Range + CORS verified); index stays local because it's small.
+            spotsBin:   'https://storage.googleapis.com/aang_data/potree_viewer/cell_spots_aang.bin',
+            // spotsBin: './data/cell_spots_aang.bin',  // local fallback
             spotsIndex: './data/cell_spots_aang_index.json',
             roi: {"x0": 0, "x1": 6431, "y0": 0, "y1": 8544 },
             zoomLevels: 10,
